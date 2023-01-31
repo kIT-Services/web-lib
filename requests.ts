@@ -1,7 +1,7 @@
 import { browser } from "$app/environment";
 
 let defaultApi: string = 'https://api.kitservices.dev';
-export const api = getApi();
+let apiOverride: string|null = null;
 let session: Promise<any>;
 
 export function init(api: string): void {
@@ -41,7 +41,7 @@ export async function upload(endpoint: string, file: File): Promise<any> {
 	if(!browser) return null;
 
 	const headers = getHeaders();
-	const url = `${api}${endpoint}`;
+	const url = `${getApi()}${endpoint}`;
 	const req = await fetch(url, {
 		headers,
 		method: 'POST',
@@ -73,7 +73,7 @@ async function doRequest(method: string, endpoint: string, body: object|null): P
 	await session;
 
 	const headers = getHeaders();
-	const url = `${api}${endpoint}`;
+	const url = `${getApi()}${endpoint}`;
 	const req = await fetch(url, {
 		method,
 		headers,
@@ -111,15 +111,19 @@ function getHeaders(): { [key: string]: string } {
 }
 
 function getApi(): string {
-	if(browser) {
+	if(browser && !apiOverride) {
 		const cookies = document.cookie.split(';');
 		for(const cookie of cookies) {
 			const [key, value] = cookie.split('=');
-			if(key == 'api') return decodeURIComponent(value);
+			if(key == 'api') {
+				apiOverride = decodeURIComponent(value);
+				return apiOverride;
+			}
 		}
 	}
 
-	return defaultApi;
+	if(apiOverride) return apiOverride;
+	else return defaultApi;
 }
 
 function addParamsTo(endpoint: string, params: { [key: string]: string }): string {
