@@ -2,9 +2,11 @@ import { browser } from "$app/environment";
 
 export const api = getApi();
 let session: Promise<any>;
+let defaultApi: string;
 
-export function init(): void {
+export function init(api: string): void {
 	if(!browser) return;
+	defaultApi = api;
 
 	session = fetch(`${api}/session`, {
 		headers: getHeaders(),
@@ -117,7 +119,7 @@ function getApi(): string {
 		}
 	}
 
-	return 'https://api.kitservices.dev';
+	return defaultApi;
 }
 
 function addParamsTo(endpoint: string, params: { [key: string]: string }): string {
