@@ -1,8 +1,8 @@
 import { browser } from "$app/environment";
 
+let defaultApi: string = 'https://api.kitservices.dev';
 export const api = getApi();
 let session: Promise<any>;
-let defaultApi: string = 'https://api.kitservices.dev';
 
 export function init(api: string): void {
 	if(!browser) return;
