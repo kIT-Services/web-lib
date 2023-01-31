@@ -110,7 +110,13 @@ function getHeaders(): { [key: string]: string } {
 	return headers;
 }
 
-function getApi(): string {
+function addParamsTo(endpoint: string, params: { [key: string]: string }): string {
+	const urlParams = new URLSearchParams();
+	for(const k in params) urlParams.set(k, params[k]);
+	return `${endpoint}?${urlParams}`;
+}
+
+export function getApi(): string {
 	if(browser && !apiOverride) {
 		const cookies = document.cookie.split(';');
 		for(const cookie of cookies) {
@@ -125,10 +131,3 @@ function getApi(): string {
 	if(apiOverride) return apiOverride;
 	else return defaultApi;
 }
-
-function addParamsTo(endpoint: string, params: { [key: string]: string }): string {
-	const urlParams = new URLSearchParams();
-	for(const k in params) urlParams.set(k, params[k]);
-	return `${endpoint}?${urlParams}`;
-}
-
