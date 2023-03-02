@@ -8,7 +8,7 @@ export function init(api: string): void {
 	if(!browser) return;
 	defaultApi = api;
 
-	session = fetch(`${api}/session`, {
+	session = fetch(`${getApi()}/session`, {
 		headers: getHeaders(),
 		mode: 'cors',
 		credentials: 'include',
