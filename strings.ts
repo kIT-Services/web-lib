@@ -24,3 +24,13 @@ export function prefixSI(n: number, unit: string): string {
 
 	return `${Math.round(n)}${prefix}${unit}`;
 }
+
+export function toTitleCase(s: string): string {
+	const words = s.split(' ').map(toTitleCaseWord);
+	return words.join(' ');
+}
+
+export function toTitleCaseWord(word: string): string {
+	const first = word.charAt(0);
+	return first.toLocaleUpperCase() + word.substring(1);
+}
